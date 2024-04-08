@@ -1,3 +1,5 @@
+import { ThreeCircles } from "react-loader-spinner";
+
 const Loader = () => {
   return;
   {

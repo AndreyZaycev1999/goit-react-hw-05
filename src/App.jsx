@@ -1,42 +1,35 @@
-import { useState } from "react";
-import { NavLink, Routes, Route } from "react-router-dom";
-import clsx from "clsx";
+import { Suspense, lazy } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import Loader from "./components/Loader/Loader";
+import AppBar from "./components/AppBar/AppBar";
 
-import { useMovieSearch } from "./hooks/useMovieSearch";
-import HomePage from "./pages/HomePage";
-import MoviesPage from "./pages/MoviesPage";
-import MovieDetailsPage from "./pages/MovieDetailsPage";
-import NotFoundPage from "./pages/NotFoundPage";
-import css from "./app.module.css";
+const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
+const MoviesPage = lazy(() => import("./pages/MoviesPage/MoviesPage"));
+const MovieDetailsPage = lazy(() =>
+  import("./pages/MovieDetailsPage/MovieDetailsPage")
+);
+const MovieCast = lazy(() => import("./components/MovieCast/MovieCast"));
+const MovieReviews = lazy(() =>
+  import("./components/MovieReviews/MovieReviews")
+);
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage/NotFoundPage"));
 
-// Підсвічування активного пункту меню
-const getNavLinkClassName = ({ isActive }) =>
-  clsx(css.navLink, { [css.active]: isActive });
-
-function App() {
-  const { movies, isLoading, isError, setQuery, setMovies } = useMovieSearch();
-
+const App = () => {
   return (
-    <div>
-      <header>
-        <nav className={css.nav}>
-          <NavLink className={getNavLinkClassName} to="/">
-            Home
-          </NavLink>
-          <NavLink className={getNavLinkClassName} to="/movies-page">
-            MoviesPage
-          </NavLink>
-        </nav>
-      </header>
+    <Suspense fallback={<Loader />}>
       <Routes>
-        <Route path="/" element={<HomePage movies={movies} />} />
-        <Route path="/:movieId" element={<MovieDetailsPage />} />
-        <Route path="/movies-page" element={<MoviesPage />} />
-        <Route path="/movies-page/:movieId" element={<MovieDetailsPage />} />
+        <Route path="/" element={<AppBar />}>
+          <Route index element={<HomePage />} />
+          <Route path="movies" element={<MoviesPage />} />
+          <Route path="movies/:movieId" element={<MovieDetailsPage />}>
+            <Route path="cast" element={<MovieCast />} />
+            <Route path="reviews" element={<MovieReviews />} />
+          </Route>
+        </Route>
+
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </div>
+    </Suspense>
   );
-}
-
+};
 export default App;

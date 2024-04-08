@@ -1,0 +1,8 @@
+.movieDetailsInfo {
+    display: flex;
+    margin-bottom: 60px;
+}
+
+.info {
+    margin-left: 30px;
+}
