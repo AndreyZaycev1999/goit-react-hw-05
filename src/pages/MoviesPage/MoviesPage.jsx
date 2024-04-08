@@ -4,6 +4,7 @@ import MovieList from "../../components/MovieList/MovieList";
 import { fetchMoviesBySearch } from "../../services/api";
 import { useSearchParams } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
+import css from "./MoviesPage.module.css";
 
 const MoviesPage = () => {
   const [loading, setLoading] = useState(false);
@@ -39,13 +40,13 @@ const MoviesPage = () => {
   }, [searchParams]);
 
   return (
-    <>
+    <div className={css.moviesPage}>
       {loading && <Loader />}
 
       <SearchBar onSubmit={handleSearchFormSubmit} />
 
       {searchParams && <MovieList items={movieItems} />}
-    </>
+    </div>
   );
 };
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-// import css from "./SearchForm.module.css";
+import css from "./SearchBar.module.css";
 
 const SearchBar = ({ onSubmit }) => {
   const [query, setQuery] = useState("");
@@ -16,7 +16,7 @@ const SearchBar = ({ onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmitForm}>
+    <form onSubmit={handleSubmitForm} className={css.form}>
       <input
         type="text"
         autoComplete="off"
