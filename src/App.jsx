@@ -2,20 +2,20 @@ import { useState } from "react";
 import { NavLink, Routes, Route } from "react-router-dom";
 import clsx from "clsx";
 
+import { useMovieSearch } from "./hooks/useMovieSearch";
 import HomePage from "./pages/HomePage";
 import MoviesPage from "./pages/MoviesPage";
 import MovieDetailsPage from "./pages/MovieDetailsPage";
 import NotFoundPage from "./pages/NotFoundPage";
-
 import css from "./app.module.css";
 
+// Підсвічування активного пункту меню
 const getNavLinkClassName = ({ isActive }) =>
   clsx(css.navLink, { [css.active]: isActive });
 
-const keyAPI =
-  "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0MTE3ODE5MWZmMDg1OTUwYmQzYjIwNGEwYTBlMDg1ZSIsInN1YiI6IjY0MzFjNTk2MWY5OGQxMDFmNjQ1ZTdmNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nIjQeklNXlOzeHtmqvE0mK4xxDQeswZbK-RObK94iXU";
-
 function App() {
+  const { movies, isLoading, isError, setQuery, setMovies } = useMovieSearch();
+
   return (
     <div>
       <header>
@@ -28,14 +28,13 @@ function App() {
           </NavLink>
         </nav>
       </header>
-      <nav>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/movies-page" element={<MoviesPage />} />
-          <Route path="/movie-page/:movieId" element={<MovieDetailsPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </nav>
+      <Routes>
+        <Route path="/" element={<HomePage movies={movies} />} />
+        <Route path="/:movieId" element={<MovieDetailsPage />} />
+        <Route path="/movies-page" element={<MoviesPage />} />
+        <Route path="/movies-page/:movieId" element={<MovieDetailsPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
     </div>
   );
 }
